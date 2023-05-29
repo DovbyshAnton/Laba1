@@ -1,0 +1,95 @@
+using System;  
+
+  
+
+namespace StudentInformation  
+
+  
+
+{  
+
+  
+
+    class Program  
+
+  
+
+    {  
+
+  
+
+        private const string V1 = "1-3";  
+
+  
+
+    
+
+  
+
+        static void Main(string[] args)  
+
+  
+
+        {  
+
+  
+
+            string surname = "Dovbysh";  
+
+  
+
+            string initials = "A.";  
+
+  
+
+            string faculty = "Information technologies";  
+
+  
+
+            string specialty = "Software Engineering";  
+
+  
+
+            string formOfEducation = "Full-time";  
+
+  
+
+            string group = V1;  
+
+  
+
+    
+
+  
+
+            Console.WriteLine("Student Information");  
+
+  
+
+            Console.WriteLine("-------------------");  
+
+  
+
+            Console.WriteLine($"Surname and initials: {surname} {initials}");  
+
+  
+
+            Console.WriteLine($"Faculty: {faculty}");  
+
+  
+
+            Console.WriteLine($"Specialty: {specialty}");  
+
+  
+
+            Console.WriteLine($"Form of education: {formOfEducation}");  
+
+  
+
+            Console.WriteLine($"Group: {group}");  
+
+  
+
+        }  
+    }  
+} 
