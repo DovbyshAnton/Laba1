@@ -1,25 +1,180 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.4.33213.308
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp9", "ConsoleApp9\ConsoleApp9.csproj", "{CB810CB2-8863-4D5A-A46B-F00827E137A1}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CB810CB2-8863-4D5A-A46B-F00827E137A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CB810CB2-8863-4D5A-A46B-F00827E137A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CB810CB2-8863-4D5A-A46B-F00827E137A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CB810CB2-8863-4D5A-A46B-F00827E137A1}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {8901A3B5-2221-4DB6-98EC-8396E6E4459A}
-	EndGlobalSection
-EndGlobal
+using System;
+using System.Collections.Generic;
+
+class Book
+{
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public int Year { get; set; }
+    public string ISBN { get; set; }
+
+    public Book(string title, string author, int year, string isbn)
+    {
+        Title = title;
+        Author = author;
+        Year = year;
+        ISBN = isbn;
+    }
+}
+
+class Library
+{
+    private List<Book> books;
+
+    public Library()
+    {
+        books = new List<Book>();
+    }
+
+    public void AddBook(Book book)
+    {
+        books.Add(book);
+    }
+
+    public void RemoveBook(Book book)
+    {
+        books.Remove(book);
+    }
+
+    public List<Book> SearchByAuthor(string author)
+    {
+        return books.FindAll(b => b.Author.Equals(author, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public List<Book> SearchByTitle(string title)
+    {
+        return books.FindAll(b => b.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public List<Book> GetAllBooks()
+    {
+        return books;
+    }
+
+    internal List<Book> SearchByISBN(string? isbnToDelete)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Library library = new Library();
+
+        while (true)
+        {
+            Console.WriteLine("Оберіть опцію:");
+            Console.WriteLine("1. Додати книгу");
+            Console.WriteLine("2. Видалити книгу");
+            Console.WriteLine("3. Пошук за автором");
+            Console.WriteLine("4. Пошук за назвою");
+            Console.WriteLine("5. Показати всі книги");
+            Console.WriteLine("6. Вийти");
+
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    Console.Write("Назва книги: ");
+                    string title = Console.ReadLine();
+                    Console.Write("Автор: ");
+                    string author = Console.ReadLine();
+                    Console.Write("Рік видання: ");
+                    int year = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("ISBN: ");
+                    string isbn = Console.ReadLine();
+
+                    Book newBook = new Book(title, author, year, isbn);
+                    library.AddBook(newBook);
+                    Console.WriteLine("Книга додана до бібліотеки.");
+                    break;
+
+                case 2:
+                    Console.Write("Введіть ISBN книги, яку потрібно видалити: ");
+                    string isbnToDelete = Console.ReadLine();
+                    List<Book> booksToDelete = library.SearchByISBN(isbnToDelete);
+
+                    if (booksToDelete.Count > 0)
+                    {
+                        foreach (Book bookToDelete in booksToDelete)
+                        {
+                            library.RemoveBook(bookToDelete);
+                            Console.WriteLine($"Книга {bookToDelete.Title} видалена з бібліотеки.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Книга не знайдена.");
+                    }
+                    break;
+
+                case 3:
+                    Console.Write("Введіть автора для пошуку: ");
+                    string authorToSearch = Console.ReadLine();
+                    List<Book> booksByAuthor = library.SearchByAuthor(authorToSearch);
+
+                    if (booksByAuthor.Count > 0)
+                    {
+                        Console.WriteLine("Знайдені книги:");
+                        foreach (Book book in booksByAuthor)
+                        {
+                            Console.WriteLine($"{book.Title} ({book.Year})");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Книги автора не знайдено.");
+                    }
+                    break;
+
+                case 4:
+                    Console.Write("Введіть назву для пошуку: ");
+                    string titleToSearch = Console.ReadLine();
+                    List<Book> booksByTitle = library.SearchByTitle(titleToSearch);
+
+                    if (booksByTitle.Count > 0)
+                    {
+                        Console.WriteLine("Знайдені книги:");
+                        foreach (Book book in booksByTitle)
+                        {
+                            Console.WriteLine($"{book.Title} ({book.Year})");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Книги за вказаною назвою не знайдено.");
+                    }
+                    break;
+
+                case 5:
+                    List<Book> allBooks = library.GetAllBooks();
+
+                    if (allBooks.Count > 0)
+                    {
+                        Console.WriteLine("Всі книги в бібліотеці:");
+                        foreach (Book book in allBooks)
+                        {
+                            Console.WriteLine($"{book.Title} ({book.Author}, {book.Year}, ISBN: {book.ISBN})");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Бібліотека порожня.");
+                    }
+                    break;
+
+                case 6:
+                    Console.WriteLine("Дякуємо за використання нашої бібліотеки. До побачення!");
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    Console.WriteLine("Невірний вибір опції. Будь ласка, спробуйте ще раз.");
+                    break;
+            }
+        }
+    }
+}
